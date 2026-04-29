@@ -55,6 +55,7 @@ export async function POST(req: Request) {
     })
 
     const data = await res.json()
+    console.log('[capi]', JSON.stringify(data))
     return Response.json(data, {
       status: res.ok ? 200 : 502,
       headers: CORS_HEADERS,
