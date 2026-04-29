@@ -42,6 +42,7 @@ export async function POST(req: Request) {
           event_name: 'consulta_solicitada',
           event_time: Math.floor(Date.now() / 1000),
           action_source: 'website',
+          event_source_url: 'https://funnel.esmas.cl',
           user_data: userData,
         },
       ],
