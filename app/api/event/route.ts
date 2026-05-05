@@ -24,13 +24,22 @@ export async function OPTIONS() {
 
 export async function POST(req: Request) {
   try {
-    const { email, phone, firstName, fbp, fbc, clientIp, clientUserAgent } =
-      await req.json()
+    const body = await req.json()
+
+    const email     = body.email     || body.customData?.email
+    const phone     = body.phone     || body.customData?.phone
+    const firstName = body.firstName || body.customData?.firstName
+    const lastName  = body.lastName  || body.customData?.lastName
+    const fbp             = body.fbp             || body.customData?.fbp
+    const fbc             = body.fbc             || body.customData?.fbc
+    const clientIp        = body.clientIp        || body.customData?.clientIp
+    const clientUserAgent = body.clientUserAgent || body.customData?.clientUserAgent
 
     const userData: Record<string, string> = {}
-    if (email)           userData.em = sha256(email)
-    if (phone)           userData.ph = sha256(normalizePhone(phone))
-    if (firstName)       userData.fn = sha256(firstName)
+    if (email)     userData.em = sha256(email)
+    if (phone)     userData.ph = sha256(normalizePhone(phone))
+    if (firstName) userData.fn = sha256(firstName)
+    if (lastName)  userData.ln = sha256(lastName)
     if (fbp)             userData.fbp = fbp
     if (fbc)             userData.fbc = fbc
     if (clientIp)        userData.client_ip_address = clientIp
