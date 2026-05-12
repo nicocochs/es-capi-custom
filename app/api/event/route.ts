@@ -30,6 +30,10 @@ export async function POST(req: Request) {
     const phone     = body.phone     || body.customData?.phone
     const firstName = body.firstName || body.customData?.firstName
     const lastName  = body.lastName  || body.customData?.lastName
+    const eventName = body.eventName || body.customData?.eventName || 'consulta_solicitada'
+    const value     = body.value     || body.customData?.value
+    const currency  = body.currency  || body.customData?.currency
+    const testCode  = body.testCode  || body.customData?.testCode
     const fbp             = body.fbp             || body.customData?.fbp
     const fbc             = body.fbc             || body.customData?.fbc
     const clientIp        = body.clientIp        || body.customData?.clientIp
@@ -48,14 +52,16 @@ export async function POST(req: Request) {
     const payload = {
       data: [
         {
-          event_name: 'consulta_solicitada',
+          event_name: eventName,
           event_time: Math.floor(Date.now() / 1000),
           action_source: 'website',
           event_source_url: 'https://funnel.esmas.cl',
           user_data: userData,
+          ...(value && currency ? { value: parseFloat(value), currency } : {}),
         },
       ],
       access_token: CAPI_TOKEN,
+      ...(testCode ? { test_event_code: testCode } : {}),
     }
 
     const res = await fetch(CAPI_URL, {
